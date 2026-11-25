@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>wise up — ตลาดกลางชีทสรุปและโหมดอัจฉริยะ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --paper: #FAF9F6;
+            --ink: #182230;
+            --muted: #5A6577;
+            --surface: #FFFFFF;
+            --line: #E4E0D8;
+            --accent: #1D4ED8;
+            --accent-soft: #EFF6FF;
+            --emerald: #047857;
+            --emerald-soft: #ECFDF5;
+            --amber: #B45309;
+            --amber-soft: #FFFBEB;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Prompt', sans-serif; }
+        body { background: var(--paper); color: var(--ink); line-height: 1.65; -webkit-user-select: none; user-select: none; }
+
+        @media print {
+            body { display: none !important; }
+        }
+
+        header {
+            position: sticky; top: 0; z-index: 50;
+            background: rgba(250, 249, 246, 0.92); backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--line);
+            padding: 0.9rem 1.5rem;
+        }
+        .nav-wrap {
+            max-width: 1180px; margin: 0 auto;
+            display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap;
+        }
+        .brand { display: flex; align-items: center; gap: 0.65rem; font-weight: 700; font-size: 1.35rem; letter-spacing: -0.02em; color: var(--ink); text-decoration: none; }
+        .brand-mark {
+            width: 34px; height: 34px; border-radius: 9px;
+            background: var(--ink); color: var(--paper);
+            display: grid; place-items: center; font-size: 0.95rem; font-weight: 700;
+        }
+        .nav-menu { display: flex; gap: 1.25rem; list-style: none; font-size: 0.92rem; }
+        .nav-menu a { color: var(--muted); text-decoration: none; font-weight: 500; }
+        .nav-menu a:hover { color: var(--ink); }
+
+        .btn {
+            display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem;
+            padding: 0.58rem 1.05rem; border-radius: 9px; border: 1px solid transparent;
+            font-size: 0.88rem; font-weight: 500; cursor: pointer; transition: 0.18s ease;
+        }
+        .btn-primary { background: var(--ink); color: #fff; }
+        .btn-primary:hover { background: #273549; }
+        .btn-accent { background: var(--accent); color: #fff; }
+        .btn-accent:hover { background: #1E40AF; }
+        .btn-ghost { background: var(--surface); color: var(--ink); border-color: var(--line); }
+        .btn-ghost:hover { border-color: var(--ink); }
+        .btn-sm { padding: 0.42rem 0.8rem; font-size: 0.82rem; }
+
+        .container { max-width: 1180px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+        .hero {
+            background: var(--surface); border: 1px solid var(--line); border-radius: 18px;
+            padding: 2.2rem; margin-bottom: 2.5rem;
+            display: grid; grid-template-columns: 1.35fr 0.9fr; gap: 2rem; align-items: center;
+        }
+        @media (max-width: 860px) { .hero { grid-template-columns: 1fr; padding: 1.5rem; } }
+
+        .eyebrow {
+            display: inline-flex; align-items: center; gap: 0.4rem;
+            font-size: 0.78rem; font-weight: 600; color: var(--emerald);
+            background: var(--emerald-soft); padding: 0.28rem 0.75rem; border-radius: 999px; margin-bottom: 0.85rem;
+        }
+        .hero h1 { font-size: clamp(1.7rem, 3vw, 2.45rem); line-height: 1.25; font-weight: 700; margin-bottom: 0.85rem; letter-spacing: -0.02em; }
+        .hero p { color: var(--muted); font-size: 0.98rem; margin-bottom: 1.35rem; }
+        .hero-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+
+        .calc-box {
+            background: var(--paper); border: 1px solid var(--line); border-radius: 14px; padding: 1.35rem;
+        }
+        .calc-box h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.35rem; }
+        .calc-box p.sub { font-size: 0.8rem; color: var(--muted); margin-bottom: 1rem; }
+        .field-label { display: block; font-size: 0.82rem; font-weight: 500; margin-bottom: 0.35rem; color: var(--ink); }
+        .input {
+            width: 100%; padding: 0.58rem 0.8rem; border-radius: 8px;
+            border: 1px solid var(--line); background: var(--surface); color: var(--ink); font-size: 0.92rem;
+        }
+        .calc-result {
+            margin-top: 1rem; padding-top: 0.9rem; border-top: 1px dashed var(--line);
+            display: grid; gap: 0.4rem; font-size: 0.86rem;
+        }
+        .calc-row { display: flex; justify-content: space-between; }
+        .calc-total { font-weight: 700; font-size: 1rem; color: var(--accent); }
+
+        .sec-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 1rem; margin-bottom: 1.25rem; flex-wrap: wrap; }
+        .sec-head h2 { font-size: 1.4rem; font-weight: 700; letter-spacing: -0.015em; }
+        .sec-head p { font-size: 0.88rem; color: var(--muted); }
+
+        .filters { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.4rem; }
+        .chip {
+            padding: 0.42rem 0.9rem; border-radius: 999px; font-size: 0.84rem;
+            border: 1px solid var(--line); background: var(--surface); color: var(--muted); cursor: pointer;
+        }
+        .chip.active { background: var(--ink); color: #fff; border-color: var(--ink); }
+
+        .grid-3 { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 1.25rem; margin-bottom: 3rem; }
+        .card {
+            background: var(--surface); border: 1px solid var(--line); border-radius: 14px;
+            padding: 1.35rem; display: flex; flex-direction: column; justify-content: space-between; gap: 1rem;
+        }
+        .card-top { display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; }
+        .tag-verified {
+            font-size: 0.74rem; font-weight: 600; color: var(--emerald);
+            background: var(--emerald-soft); padding: 0.22rem 0.65rem; border-radius: 999px;
+        }
+        .tag-subj { font-size: 0.76rem; color: var(--muted); font-weight: 500; }
+        .card h3 { font-size: 1.08rem; font-weight: 600; margin: 0.55rem 0 0.35rem; }
+        .card .desc { font-size: 0.86rem; color: var(--muted); }
+        .pen-name { font-size: 0.8rem; color: var(--ink); font-weight: 500; margin-top: 0.5rem; }
+        .price-box { background: var(--paper); border-radius: 10px; padding: 0.7rem 0.85rem; display: flex; justify-content: space-between; align-items: center; }
+        .price-main { font-size: 1.08rem; font-weight: 700; color: var(--ink); }
+        .price-sub { font-size: 0.74rem; color: var(--emerald); font-weight: 500; }
+
+        .study-panel {
+            background: var(--surface); border: 1px solid var(--line); border-radius: 18px;
+            padding: 1.6rem; margin-bottom: 3rem;
+        }
+        .mode-tabs { display: flex; gap: 0.5rem; border-bottom: 1px solid var(--line); padding-bottom: 0.9rem; margin-bottom: 1.35rem; flex-wrap: wrap; }
+
+        .sheet-viewer {
+            position: relative; overflow: hidden;
+            background: #FCFBF8; border: 1px solid var(--line); border-radius: 12px;
+            padding: 1.6rem; min-height: 250px;
+        }
+        .watermark-layer {
+            position: absolute; inset: 0; pointer-events: none;
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; place-items: center;
+            opacity: 0.11; transform: rotate(-18deg); font-size: 0.82rem; font-weight: 600; color: var(--ink);
+            transition: transform 0.6s ease;
+        }
+        .security-banner {
+            display: flex; justify-content: space-between; align-items: center; gap: 0.75rem; flex-wrap: wrap;
+            background: var(--amber-soft); border: 1px solid #FDE68A; color: var(--amber);
+            padding: 0.65rem 0.95rem; border-radius: 10px; font-size: 0.8rem; margin-bottom: 1rem; font-weight: 500;
+        }
+
+        .quiz-q { margin-bottom: 1.1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--line); }
+        .quiz-opt {
+            display: block; width: 100%; text-align: left;
+            padding: 0.55rem 0.85rem; margin-top: 0.4rem; border-radius: 8px;
+            border: 1px solid var(--line); background: var(--paper); cursor: pointer; font-size: 0.88rem;
+        }
+        .quiz-opt.selected { border-color: var(--accent); background: var(--accent-soft); font-weight: 500; }
+
+        .chat-box { display: grid; grid-template-columns: 240px 1fr; gap: 1.2rem; }
+        @media (max-width: 760px) { .chat-box { grid-template-columns: 1fr; } }
+        .chat-sidebar { background: var(--paper); border: 1px solid var(--line); border-radius: 12px; padding: 1rem; font-size: 0.84rem; }
+        .admin-badge {
+            margin-top: 0.75rem; padding: 0.6rem; border-radius: 8px;
+            background: var(--emerald-soft); color: var(--emerald); font-size: 0.76rem; font-weight: 500;
+        }
+        .chat-window { border: 1px solid var(--line); border-radius: 12px; padding: 1rem; background: var(--paper); }
+        .msg-list { max-height: 240px; overflow-y: auto; display: flex; flex-direction: column; gap: 0.65rem; margin-bottom: 0.9rem; }
+        .msg { padding: 0.65rem 0.85rem; border-radius: 10px; font-size: 0.86rem; max-width: 85%; }
+        .msg.user { background: var(--ink); color: #fff; align-self: flex-end; }
+        .msg.bot { background: var(--surface); border: 1px solid var(--line); align-self: flex-start; }
+        .msg.admin-note { background: var(--amber-soft); border: 1px solid #FDE68A; color: var(--amber); font-size: 0.78rem; align-self: center; max-width: 100%; }
+        .chat-input-row { display: flex; gap: 0.5rem; }
+
+        .vetting-box {
+            background: var(--surface); border: 1px solid var(--line); border-radius: 16px;
+            padding: 1.6rem; display: grid; grid-template-columns: 1.2fr 1fr; gap: 1.5rem;
+        }
+        @media (max-width: 820px) { .vetting-box { grid-template-columns: 1fr; } }
+
+        .toast {
+            position: fixed; bottom: 18px; right: 18px; z-index: 100;
+            background: var(--ink); color: #fff; padding: 0.75rem 1.1rem;
+            border-radius: 10px; font-size: 0.85rem; box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            display: none;
+        }
+        footer { text-align: center; padding: 2rem 1rem; color: var(--muted); font-size: 0.84rem; border-top: 1px solid var(--line); }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="nav-wrap">
+        <a href="#" class="brand">
+            <span class="brand-mark">w</span>
+            <span>wise up</span>
+        </a>
+        <ul class="nav-menu">
+            <li><a href="#market">ตลาดชีทสรุป</a></li>
+            <li><a href="#smart-mode">โหมดอัจฉริยะ</a></li>
+            <li><a href="#tutors">ติวเตอร์คัดสรร</a></li>
+            <li><a href="#vetting">คิวตรวจคุณภาพ</a></li>
+        </ul>
+        <button class="btn btn-primary btn-sm" onclick="scrollToEl('smart-mode')">เปิดโหมดอัจฉริยะ</button>
+    </div>
+</header>
+
+<main class="container">
+    <section class="hero">
+        <div>
+            <div class="eyebrow">ผู้เขียนรับเต็ม 100% · ผ่านการตรวจจากนักวิชาการ</div>
+            <h1>พื้นที่เรียนรู้คุณภาพสูง ที่ยุติธรรมกับผู้เขียนและปลอดภัยสำหรับผู้เรียน</h1>
+            <p>รวมชีทสรุปที่คัดกรองมาตรฐานทางวิชาการอย่างเข้มงวด พร้อมโหมดอ่านชีทกันคัดลอก ทำข้อสอบเช็กคำตอบในตัว และช่องทางถาม-ตอบกับ AI หรือผู้เขียนภายใต้นามแฝงที่มีแอดมินดูแล</p>
+            <div class="hero-actions">
+                <button class="btn btn-primary" onclick="scrollToEl('market')">เลือกดูชีทสรุป</button>
+                <button class="btn btn-ghost" onclick="scrollToEl('vetting')">ส่งชีทลงคิวตรวจคุณภาพ</button>
+            </div>
+        </div>
+
+        <div class="calc-box">
+            <h3>คำนวณราคาหน้าเว็บ (ค่าบริการแพลตฟอร์ม 30%)</h3>
+            <p class="sub">ผู้เขียนกำหนดราคาและรับเต็ม 100% ระบบบวกค่าดูแลระบบและมาตรฐาน 30%</p>
+            <label class="field-label" for="creatorPrice">ราคาที่ผู้เขียนต้องการรับสุทธิ (บาท)</label>
+            <input type="number" id="creatorPrice" class="input" value="100" min="10" oninput="updatePriceCalc()">
+            <div class="calc-result">
+                <div class="calc-row"><span>ผู้เขียนได้รับสุทธิ (100%)</span><strong id="outCreator">100 บาท</strong></div>
+                <div class="calc-row"><span>ค่าบริการระบบ & มาตรฐาน (30%)</span><span id="outFee">30 บาท</span></div>
+                <div class="calc-row calc-total"><span>ราคาแสดงบนหน้าเว็บ</span><span id="outTotal">130 บาท</span></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="market">
+        <div class="sec-head">
+            <div>
+                <h2>ชีทสรุปที่ผ่านการคัดกรองจากนักวิชาการ</h2>
+                <p>ไม่มีการจ่ายเงินดันฟีดโฆษณา ทุกเล่มที่แนะนำผ่านการตรวจความถูกต้องทางวิชาการแล้ว</p>
+            </div>
+        </div>
+
+        <div class="filters">
+            <button class="chip active" onclick="filterSheets('all', this)">ทั้งหมด</button>
+            <button class="chip" onclick="filterSheets('วิทย์-คณิต', this)">วิทย์-คณิต</button>
+            <button class="chip" onclick="filterSheets('ภาษาไทย-สังคม', this)">ภาษาไทย-สังคม</button>
+            <button class="chip" onclick="filterSheets('ภาษาต่างประเทศ', this)">ภาษาต่างประเทศ</button>
+        </div>
+
+        <div class="grid-3" id="sheetGrid"></div>
+    </section>
+
+    <section id="smart-mode" class="study-panel">
+        <div class="sec-head">
+            <div>
+                <h2 id="activeSheetTitle">โหมดอัจฉริยะ: สรุปเคมี ม.3 & โจทย์คัดสรร</h2>
+                <p>อ่านชีทพร้อมระบบป้องกันการพิมพ์/แคปหน้าจอ ทำข้อสอบเช็กผล และถามข้อสงสัยได้ในหน้าเดียว</p>
+            </div>
+        </div>
+
+        <div class="mode-tabs">
+            <button class="btn btn-primary btn-sm" id="tab-read" onclick="switchMode('read')">1. อ่านชีท & กันคัดลอก</button>
+            <button class="btn btn-ghost btn-sm" id="tab-quiz" onclick="switchMode('quiz')">2. ทำข้อสอบ & เช็กคำตอบ</button>
+            <button class="btn btn-ghost btn-sm" id="tab-chat" onclick="switchMode('chat')">3. ถาม AI หรือแชทผู้เขียน</button>
+        </div>
+
+        <div id="panel-read">
+            <div class="security-banner">
+                <span>ปิดการสั่งพิมพ์ (Print Out) และแจ้งเตือนการแคปหน้าจอ · ฝังลายน้ำรหัสผู้ซื้ออัตโนมัติ</span>
+                <button class="btn btn-ghost btn-sm" onclick="shiftWatermark()">ทดสอบขยับลายน้ำ</button>
+            </div>
+            <div class="sheet-viewer" id="sheetViewer">
+                <div class="watermark-layer" id="watermarkLayer">
+                    <span>ID: WU-88412 · ไม่เผยแพร่</span>
+                    <span>ID: WU-88412 · ไม่เผยแพร่</span>
+                    <span>ID: WU-88412 · ไม่เผยแพร่</span>
+                    <span>ID: WU-88412 · ไม่เผยแพร่</span>
+                    <span>ID: WU-88412 · ไม่เผยแพร่</span>
+                    <span>ID: WU-88412 · ไม่เผยแพร่</span>
+                </div>
+                <h3 style="margin-bottom: 0.6rem;">บทสรุป: อัตราการเกิดปฏิกิริยาเคมีและสมดุลพลังงาน</h3>
+                <p style="color: var(--muted); font-size: 0.92rem; margin-bottom: 0.7rem;">
+                    1. <strong>ปัจจัยที่มีผลต่ออัตราการเกิดปฏิกิริยา:</strong> ชนิดของสารตั้งต้น ความเข้มข้น พื้นที่ผิว อุณหภูมิ ตัวเร่งและตัวหน่วงปฏิกิริยา<br>
+                    2. <strong>หลักการสำคัญ:</strong> การบดสารให้เล็กลงช่วยเพิ่มพื้นที่ผิว ทำให้โมเลกุลชนกันบ่อยขึ้น อัตราการเกิดปฏิกิริยาจึงเพิ่มขึ้น<br>
+                    3. <strong>จุดเน้นทำข้อสอบ:</strong> ตัวเร่งปฏิกิริยาช่วยลดพลังงานก่อกัมมันต์ (Ea) แต่ไม่เปลี่ยนค่าพลังงานของสารตั้งต้นและผลิตภัณฑ์
+                </p>
+                <p style="font-size: 0.8rem; color: var(--muted);">ผู้เขียน: <strong id="readerAuthor">นามแฝง: ChemCraft_TH</strong> (ข้อมูลตัวจริงบันทึกไว้ในระบบบริษัทเพื่อความปลอดภัย)</p>
+            </div>
+        </div>
+
+        <div id="panel-quiz" style="display: none;">
+            <div class="quiz-q">
+                <p><strong>ข้อ 1:</strong> การเติมตัวเร่งปฏิกิริยาลงในระบบ ส่งผลต่อข้อใดถูกต้องที่สุด?</p>
+                <button class="quiz-opt" onclick="selectOpt(1, 'a', this)">ก. ลดพลังงานก่อกัมมันต์ (Ea) และเพิ่มอัตราการเกิดปฏิกิริยา</button>
+                <button class="quiz-opt" onclick="selectOpt(1, 'b', this)">ข. เพิ่มค่าพลังงานของผลิตภัณฑ์ให้สูงขึ้น</button>
+            </div>
+            <div class="quiz-q">
+                <p><strong>ข้อ 2:</strong> หากต้องการให้ปฏิกิริยาระหว่างผงโลหะกับกรดเกิดเร็วขึ้น ควรทำอย่างไร?</p>
+                <button class="quiz-opt" onclick="selectOpt(2, 'a', this)">ก. ลดอุณหภูมิของสารละลายกรด</button>
+                <button class="quiz-opt" onclick="selectOpt(2, 'b', this)">ข. เพิ่มความเข้มข้นของกรดหรือเพิ่มพื้นที่ผิวของโลหะ</button>
+            </div>
+            <button class="btn btn-accent" onclick="checkQuiz()">ตรวจคำตอบและดูเฉลย</button>
+            <div id="quizFeedback" style="margin-top: 0.9rem; font-size: 0.9rem;"></div>
+        </div>
+
+        <div id="panel-chat" style="display: none;">
+            <div class="chat-box">
+                <div class="chat-sidebar">
+                    <label class="field-label">เลือกคู่สนทนา</label>
+                    <select id="chatTarget" class="input" onchange="changeChatTarget()">
+                        <option value="ai">ผู้ช่วย AI อัจฉริยะ (ตอบทันที)</option>
+                        <option value="author">ผู้เขียน (ใช้นามแฝง · แอดมินดูแล)</option>
+                    </select>
+                    <div class="admin-badge">
+                        มีแอดมินของ wise up คอยสอดส่องความเรียบร้อยตลอดการสนทนา สื่อสารในแอปเท่านั้นเพื่อความปลอดภัยของทั้งสองฝ่าย
+                    </div>
+                </div>
+                <div class="chat-window">
+                    <div class="msg-list" id="msgList">
+                        <div class="msg admin-note">ระบบความปลอดภัย: ผู้เขียนใช้นามแฝง (บริษัทเก็บข้อมูลจริง) และมีแอดมินคอยกำกับดูแลความเรียบร้อยในห้องแชท</div>
+                        <div class="msg bot">สวัสค่ะ มีข้อสงสัยตรงเนื้อหาหรือโจทย์ข้อไหนในชีทนี้ สอบถามได้เลยนะคะ</div>
+                    </div>
+                    <div class="chat-input-row">
+                        <input type="text" id="chatInput" class="input" placeholder="พิมพ์คำถามของคุณที่นี่..." onkeydown="if(event.key==='Enter') sendMsg()">
+                        <button class="btn btn-primary" onclick="sendMsg()">ส่ง</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="tutors" style="margin-bottom: 3rem;">
+        <div class="sec-head">
+            <div>
+                <h2>ติวเตอร์และผู้ทรงคุณวุฒิที่ผ่านการคัดเลือก</h2>
+                <p>คัดเฉพาะผู้มีผลงาน/รางวัลรับรองจริง และผ่านการพิจารณาจากคณะกรรมการวิชาการก่อนได้รับพื้นที่แสดงผล</p>
+            </div>
+        </div>
+        <div class="grid-3">
+            <div class="card">
+                <div>
+                    <span class="tag-verified">ผ่านคณะกรรมการวิชาการ</span>
+                    <h3>อ.ภากร — ติวเตอร์เคมีโอลิมปิก & ม.ปลาย</h3>
+                    <p class="desc">มีผลงานรางวัลระดับชาติและสถิติผู้เรียนสอบติดคณะสายวิทย์สุขภาพต่อเนื่อง ผ่านการตรวจสอบหลักสูตรครบถ้วน</p>
+                </div>
+                <button class="btn btn-ghost btn-sm" onclick="showToast('ดูรายละเอียดหลักสูตรที่ผ่านการรับรองของ อ.ภากร แล้ว')">ดูประวัติที่ผ่านการรับรอง</button>
+            </div>
+            <div class="card">
+                <div>
+                    <span class="tag-verified">ผ่านคณะกรรมการวิชาการ</span>
+                    <h3>ครูพิมพ์ชนก — ผู้เชี่ยวชาญภาษาไทย & วรรณคดี</h3>
+                    <p class="desc">เชี่ยวชาญการวิเคราะห์ภาษา การเขียน และโคลงฉันท์กาพย์กลอน ได้รับการรับรองมาตรฐานการสอนจากทีมวิชาการ</p>
+                </div>
+                <button class="btn btn-ghost btn-sm" onclick="showToast('ดูรายละเอียดหลักสูตรที่ผ่านการรับรองของ ครูพิมพ์ชนก แล้ว')">ดูประวัติที่ผ่านการรับรอง</button>
+            </div>
+            <div class="card">
+                <div>
+                    <span class="tag-verified">ผ่านคณะกรรมการวิชาการ</span>
+                    <h3>ครูนนท์ — คณิตศาสตร์ประยุกต์ & แก้โจทย์</h3>
+                    <p class="desc">เน้นความเข้าใจเชิงแนวคิดและโครงสร้างโจทย์ ผ่านการประเมินคุณภาพเนื้อหาโดยคณะกรรมการวิชาการ wise up</p>
+                </div>
+                <button class="btn btn-ghost btn-sm" onclick="showToast('ดูรายละเอียดหลักสูตรที่ผ่านการรับรองของ ครูนนท์ แล้ว')">ดูประวัติที่ผ่านการรับรอง</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="vetting" class="vetting-box">
+        <div>
+            <span class="eyebrow">ระบบลงคิวตรวจมาตรฐานวิชาการ</span>
+            <h2 style="margin-bottom: 0.5rem;">ส่งชีทเข้าคิวให้นักวิชาการประเมินคุณภาพ</h2>
+            <p style="color: var(--muted); font-size: 0.9rem; margin-bottom: 0.8rem;">
+                ผู้เขียนที่ต้องการป้ายรับรองคุณภาพและสิทธิ์แสดงในหมวดชีทแนะนำที่ผ่านการคัดกรอง สามารถชำระค่าสมัครและลงคิวเพื่อให้คณะนักวิชาการตรวจสอบความถูกต้องของเนื้อหาก่อนได้ (ไม่เปิดขายพื้นที่ดันฟีดโฆษณา)
+            </p>
+            <p style="font-size: 0.84rem; color: var(--ink);">
+                • ค่าลงคิวประเมินเบื้องต้น: <strong>60 บาท / เล่ม</strong> (เป็นค่าดำเนินการตรวจสอบของทีมวิชาการ)<br>
+                • ผลการตรวจเป็นไปตามเกณฑ์มาตรฐานวิชาการจริง
+            </p>
+        </div>
+        <div>
+            <label class="field-label" for="sheetTitleInput">ชื่อชีทสรุปที่ต้องการส่งตรวจ</label>
+            <input type="text" id="sheetTitleInput" class="input" placeholder="เช่น สรุปฟิสิกส์การเคลื่อนที่ ม.ปลาย" style="margin-bottom: 0.7rem;">
+            <label class="field-label" for="penNameInput">นามแฝงผู้เขียน (แสดงให้ผู้เรียนเห็น)</label>
+            <input type="text" id="penNameInput" class="input" placeholder="เช่น PhyNote_Studio" style="margin-bottom: 0.9rem;">
+            <button class="btn btn-primary" style="width: 100%;" onclick="submitQueue()">ยืนยันลงคิวส่งนักวิชาการตรวจ (60 บาท)</button>
+        </div>
+    </section>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<footer>
+    wise up · แพลตฟอร์มชีทสรุปและคลังความรู้อย่างมีความรับผิดชอบ
+</footer>
+
+<script>
+    const sheets = [
+        { id: 1, title: 'สรุปเคมี ม.3 & โจทย์คัดสรร', subj: 'วิทย์-คณิต', net: 100, author: 'ChemCraft_TH', desc: 'สรุปเนื้อหาเข้มข้นพร้อมแนวข้อสอบวิเคราะห์และเฉลยอย่างเป็นระบบ' },
+        { id: 2, title: 'หลักภาษาไทย & โคลงสี่สุภาพ', subj: 'ภาษาไทย-สังคม', net: 80, author: 'AksonThai', desc: 'เจาะลึกการใช้ภาษา ระดับภาษา และหลักการแต่งคำประพันธ์อ่านง่าย' },
+        { id: 3, title: 'Grammar & Reading สำหรับสอบเข้า', subj: 'ภาษาต่างประเทศ', net: 120, author: 'LexiLab', desc: 'สรุปโครงสร้างไวยากรณ์สำคัญและเทคนิคจับใจความเร็วพร้อมแบบฝึกหัด' }
+    ];
+
+    const answers = { 1: 'a', 2: 'b' };
+    const chosen = {};
+
+    function updatePriceCalc() {
+        const net = Math.max(0, Number(document.getElementById('creatorPrice').value) || 0);
+        const fee = Math.round(net * 0.30);
+        const total = net + fee;
+        document.getElementById('outCreator').textContent = `${net.toLocaleString()} บาท`;
+        document.getElementById('outFee').textContent = `${fee.toLocaleString()} บาท`;
+        document.getElementById('outTotal').textContent = `${total.toLocaleString()} บาท`;
+    }
+
+    function renderSheets(list) {
+        const grid = document.getElementById('sheetGrid');
+        grid.innerHTML = list.map(s => {
+            const total = Math.round(s.net * 1.30);
+            return `
+                <div class="card">
+                    <div>
+                        <div class="card-top">
+                            <span class="tag-verified">ตรวจโดยนักวิชาการ</span>
+                            <span class="tag-subj">${s.subj}</span>
+                        </div>
+                        <h3>${s.title}</h3>
+                        <p class="desc">${s.desc}</p>
+                        <div class="pen-name">นามแฝงผู้เขียน: ${s.author}</div>
+                    </div>
+                    <div class="price-box">
+                        <div>
+                            <div class="price-main">${total} บาท</div>
+                            <div class="price-sub">ผู้เขียนรับเต็ม ${s.net} บาท (100%)</div>
+                        </div>
+                        <button class="btn btn-primary btn-sm" onclick="openInSmartMode('${s.title}', '${s.author}')">เปิดโหมดอัจฉริยะ</button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    function filterSheets(category, btn) {
+        document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+        btn.classList.add('active');
+        if (category === 'all') renderSheets(sheets);
+        else renderSheets(sheets.filter(s => s.subj === category));
+    }
+
+    function openInSmartMode(title, author) {
+        document.getElementById('activeSheetTitle').textContent = `โหมดอัจฉริยะ: ${title}`;
+        document.getElementById('readerAuthor').textContent = `นามแฝง: ${author} (ข้อมูลตัวจริงบันทึกไว้ในระบบบริษัทเพื่อความปลอดภัย)`;
+        switchMode('read');
+        scrollToEl('smart-mode');
+        showToast(`เปิด "${title}" พร้อมระบบป้องกันการคัดลอกและลายน้ำแล้ว`);
+    }
+
+    function switchMode(mode) {
+        ['read', 'quiz', 'chat'].forEach(m => {
+            document.getElementById(`panel-${m}`).style.display = m === mode ? 'block' : 'none';
+            const btn = document.getElementById(`tab-${m}`);
+            btn.className = m === mode ? 'btn btn-primary btn-sm' : 'btn btn-ghost btn-sm';
+        });
+    }
+
+    function shiftWatermark() {
+        const wm = document.getElementById('watermarkLayer');
+        const x = Math.floor(Math.random() * 16) - 8;
+        const y = Math.floor(Math.random() * 16) - 8;
+        wm.style.transform = `translate(${x}px, ${y}px) rotate(-18deg)`;
+        showToast('อัปเดตตำแหน่งลายน้ำผู้ซื้อแล้ว');
+    }
+
+    function selectOpt(qNum, opt, el) {
+        chosen[qNum] = opt;
+        el.parentElement.querySelectorAll('.quiz-opt').forEach(b => b.classList.remove('selected'));
+        el.classList.add('selected');
+    }
+
+    function checkQuiz() {
+        let score = 0;
+        if (chosen[1] === answers[1]) score++;
+        if (chosen[2] === answers[2]) score++;
+        const fb = document.getElementById('quizFeedback');
+        fb.innerHTML = `<strong>ผลคะแนน: ${score} / 2 คะแนน</strong><br>เฉลยข้อ 1: ก (ตัวเร่งลด Ea) · เฉลยข้อ 2: ข (เพิ่มความเข้มข้นหรือพื้นที่ผิว)`;
+    }
+
+    function changeChatTarget() {
+        const target = document.getElementById('chatTarget').value;
+        const list = document.getElementById('msgList');
+        const note = target === 'ai'
+            ? 'เปลี่ยนเป็นผู้ช่วย AI อัจฉริยะ: ช่วยอธิบายเนื้อหาและสรุปประเด็นจากชีทได้ทันที'
+            : 'เปลี่ยนเป็นแชทกับผู้เขียน (ใช้นามแฝง): แอดมินของ wise up ร่วมสอดส่องความเรียบร้อยและปลอดภัย';
+        list.innerHTML += `<div class="msg admin-note">${note}</div>`;
+        list.scrollTop = list.scrollHeight;
+    }
+
+    function sendMsg() {
+        const input = document.getElementById('chatInput');
+        const text = input.value.trim();
+        if (!text) return;
+        const target = document.getElementById('chatTarget').value;
+        const list = document.getElementById('msgList');
+        list.innerHTML += `<div class="msg user">${text}</div>`;
+        input.value = '';
+
+        setTimeout(() => {
+            const reply = target === 'ai'
+                ? `คำอธิบายจากระบบ AI: สำหรับประเด็น "${text}" ให้ตรวจสอบเงื่อนไขตั้งต้นและหลักการเชื่อมโยงในบทสรุปด้านบนประกอบกันค่ะ`
+                : `ผู้เขียน (นามแฝง): รับทราบคำถามเรื่อง "${text}" แล้วครับ เดี๋ยวอธิบายเพิ่มเติมให้ในช่องทางนี้นะครับ (แอดมินตรวจสอบความเรียบร้อยแล้ว)`;
+            list.innerHTML += `<div class="msg bot">${reply}</div>`;
+            list.scrollTop = list.scrollHeight;
+        }, 350);
+    }
+
+    function submitQueue() {
+        const title = document.getElementById('sheetTitleInput').value.trim();
+        const pen = document.getElementById('penNameInput').value.trim();
+        if (!title || !pen) {
+            showToast('กรุณากรอกชื่อชีทและนามแฝงผู้เขียนก่อนลงคิว');
+            return;
+        }
+        showToast(`ลงคิวตรวจชีท "${title}" โดยนามแฝง "${pen}" เรียบร้อยแล้ว`);
+        document.getElementById('sheetTitleInput').value = '';
+        document.getElementById('penNameInput').value = '';
+    }
+
+    function showToast(msg) {
+        const t = document.getElementById('toast');
+        t.textContent = msg;
+        t.style.display = 'block';
+        clearTimeout(window.toastTimer);
+        window.toastTimer = setTimeout(() => { t.style.display = 'none'; }, 2800);
+    }
+
+    function scrollToEl(id) {
+        document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+    }
+
+    window.addEventListener('contextmenu', e => {
+        e.preventDefault();
+        showToast('ปิดการใช้งานคลิกขวาเพื่อคุ้มครองเนื้อหา');
+    });
+
+    updatePriceCalc();
+    renderSheets(sheets);
+</script>
+</body>
+</html>
